@@ -1,3 +1,7 @@
+
+// Recuperar carrito del localStorage o inicializarlo vacío
+let carrito = JSON.parse(localStorage.getItem('carritoOtaku')) || [];
+const cartCounter = document.getElementById('cart-counter');
 // 1. Inventario simulado de productos
 const productos = [
     { 
@@ -76,8 +80,32 @@ function renderizarProductos() {
 
 // 3. Función temporal para el carrito
 function agregarAlCarrito(idProducto) {
-    console.log("Se ha hecho clic en el producto con ID:", idProducto);
-    // Más adelante aquí programaremos la lógica de guardar en localStorage
+    // 1. Encontrar el producto en nuestro inventario
+    const productoSeleccionado = productos.find(producto => producto.id === idProducto);
+
+    // 2. Comprobar si el producto ya existe en el carrito
+    const productoEnCarrito = carrito.find(item => item.id === idProducto);
+
+    if (productoEnCarrito) {
+        productoEnCarrito.cantidad++; // Si existe, sumamos uno a la cantidad
+    } else {
+        // Si no existe, lo añadimos con cantidad 1
+        carrito.push({ ...productoSeleccionado, cantidad: 1 });
+    }
+
+    // 3. Guardar el carrito actualizado en localStorage
+    localStorage.setItem('carritoOtaku', JSON.stringify(carrito));
+
+    // 4. Actualizar la interfaz
+    actualizarContadorCarrito();
+    
+    // Pequeño feedback visual en consola
+    console.log("¡Añadido! Carrito actual:", carrito);
+}
+function actualizarContadorCarrito() {
+    // Sumamos la propiedad 'cantidad' de todos los items en el carrito
+    const totalArticulos = carrito.reduce((total, item) => total + item.cantidad, 0);
+    cartCounter.textContent = totalArticulos;
 }
 
 // 4. Inicializar la vista cuando el documento cargue
