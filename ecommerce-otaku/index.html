@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Otaku | Kawaii Edition 🌸</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    
+    <header class="main-header">
+        <div class="logo">
+            <h2>🌸 NekoShop</h2>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar animes, figuras, tazas...">
+        </div>
+        <div class="cart-icon">
+            <span>🛒</span>
+            <span id="cart-counter" class="counter">0</span>
+        </div>
+    </header>
+
+    <!-- Contenedor Principal -->
+    <main class="shop-container">
+        
+        <!-- Panel Lateral (Filtros) -->
+        <aside class="sidebar-filters">
+            <h3>Categorías</h3>
+            <ul>
+                <li><a href="#">🎀 Figuras</a></li>
+                <li><a href="#">👕 Camisetas</a></li>
+                <li><a href="#">☕ Tazas</a></li>
+            </ul>
+            
+            <h3>Series Populares</h3>
+            <ul>
+                <li><input type="checkbox"> Sailor Moon</li>
+                <li><input type="checkbox"> Cardcaptor Sakura</li>
+                <li><input type="checkbox"> Studio Ghibli</li>
+            </ul>
+        </aside>
+
+        <!-- Cuadrícula de Productos -->
+        <section class="products-grid" id="products-grid">
+            <!-- Las tarjetas de producto se inyectarán aquí con JavaScript -->
+        </section>
+
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
