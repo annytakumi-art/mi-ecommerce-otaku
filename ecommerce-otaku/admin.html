@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración 🌸</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Estilos extra específicos para la tabla del admin */
+        .admin-container { padding: 3rem; }
+        .admin-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            background: white; 
+            border-radius: var(--border-radius-sm); 
+            overflow: hidden; 
+            box-shadow: var(--shadow-soft); 
+        }
+        .admin-table th, .admin-table td { 
+            padding: 1rem; 
+            text-align: left; 
+            border-bottom: 1px solid var(--accent-color); 
+        }
+        .admin-table th { background: var(--primary-color); color: white; }
+        .status-pendiente { color: #FF9E99; font-weight: bold; }
+        .status-enviado { color: #5CB85C; font-weight: bold; }
+        .btn-enviar { 
+            background: var(--secondary-color); 
+            border: none; 
+            padding: 0.5rem 1rem; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            color: var(--text-main); 
+        }
+        .btn-enviar:hover { background: #9CE0E8; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <h2>📦 Panel de Logística (Admin)</h2>
+        </div>
+        <div>
+            <!-- Botón para volver a la tienda -->
+            <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; font-size: 1.1rem;">Volver a la Tienda 🎀</a>
+        </div>
+    </header>
+
+    <main class="admin-container">
+        <h2 style="margin-bottom: 1.5rem;">Gestión de Pedidos Recientes</h2>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID Pedido</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-pedidos">
+                <!-- JavaScript inyectará las filas de los pedidos aquí -->
+            </tbody>
+        </table>
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
