@@ -1,68 +1,43 @@
-
-// Recuperar carrito del localStorage o inicializarlo vacío
+// =========================================================
+// 1. VARIABLES GLOBALES Y REFERENCIAS DEL DOM
+// =========================================================
 let carrito = JSON.parse(localStorage.getItem('carritoOtaku')) || [];
 const cartCounter = document.getElementById('cart-counter');
-// 1. Inventario simulado de productos
-const productos = [
-    { 
-        id: 1, 
-        nombre: "Figura Nendoroid Anya Forger", 
-        precio: 55.99, 
-        categoria: "Figuras", 
-        imagen: "imagenes/anya.jpg" 
-    },
-    { 
-        id: 2, 
-        nombre: "Taza Studio Ghibli Totoro", 
-        precio: 15.50, 
-        categoria: "Tazas", 
-        imagen: "imagenes/totoro.jpg" 
-    },
-    { 
-        id: 3, 
-        nombre: "Camiseta Cardcaptor Sakura", 
-        precio: 22.00, 
-        categoria: "Camisetas", 
-        imagen: "imagenes/sakura.jpg" 
-    },
-    { 
-        id: 4, 
-        nombre: "Figura Escala 1/7 Sailor Moon", 
-        precio: 120.00, 
-        categoria: "Figuras", 
-        imagen: "imagenes/sailormoon.jpg" 
-    },
-    { 
-        id: 5, 
-        nombre: "Peluches Pochita Chainsaw Man", 
-        precio: 25.00, 
-        categoria: "Figuras", 
-        imagen: "imagenes/pochita.jpg" 
-    },
-    { 
-        id: 6, 
-        nombre: "Camiseta Jujutsu Kaisen Gojo", 
-        precio: 24.99, 
-        categoria: "Camisetas", 
-        imagen: "imagenes/gojo.jpg" 
-    }
-];
-
-// Referencia al contenedor del grid en el HTML
 const productsGrid = document.getElementById('products-grid');
 
-// 2. Función para pintar los productos en el DOM
-function renderizarProductos() {
-    productsGrid.innerHTML = ''; // Limpiamos el grid por si acaso
+// Referencias del panel del carrito
+const cartModal = document.getElementById('cart-modal');
+const openCartBtn = document.getElementById('open-cart');
+const closeCartBtn = document.getElementById('close-cart');
+const cartItemsContainer = document.getElementById('cart-items');
+const cartTotalElement = document.getElementById('cart-total');
 
+// NUEVAS Referencias para el Modal de Checkout (Pago)
+const btnCheckout = document.querySelector('.btn-checkout');
+const checkoutOverlay = document.getElementById('checkout-overlay');
+const closeCheckoutBtn = document.getElementById('close-checkout');
+const checkoutForm = document.getElementById('checkout-form');
+
+// =========================================================
+// 2. INVENTARIO SIMULADO
+// =========================================================
+const productos = [
+    { id: 1, nombre: "Figura Nendoroid Anya Forger", precio: 55.99, categoria: "Figuras", imagen: "imagenes/anya.jpg" },
+    { id: 2, nombre: "Taza Studio Ghibli Totoro", precio: 15.50, categoria: "Tazas", imagen: "imagenes/totoro.jpg" },
+    { id: 3, nombre: "Camiseta Cardcaptor Sakura", precio: 22.00, categoria: "Camisetas", imagen: "imagenes/sakura.jpg" },
+    { id: 4, nombre: "Figura Escala 1/7 Sailor Moon", precio: 120.00, categoria: "Figuras", imagen: "imagenes/sailormoon.jpg" },
+    { id: 5, nombre: "Peluches Pochita Chainsaw Man", precio: 25.00, categoria: "Figuras", imagen: "imagenes/pochita.jpg" },
+    { id: 6, nombre: "Camiseta Jujutsu Kaisen Gojo", precio: 24.99, categoria: "Camisetas", imagen: "imagenes/gojo.jpg" }
+];
+
+// =========================================================
+// 3. FUNCIONES DE CATÁLOGO Y CARRITO
+// =========================================================
+function renderizarProductos() {
+    productsGrid.innerHTML = ''; 
     productos.forEach(producto => {
-        // Crear el contenedor de la tarjeta
         const card = document.createElement('div');
         card.className = 'product-card';
-
-        // Estructura interna de la tarjeta (Uso de template literals)
-        // He añadido un 'onerror' en la imagen para que, si aún no descargas las fotos,
-        // muestre un cuadro de color pastel amigable en lugar de una imagen rota.
         card.innerHTML = `
             <img src="${producto.imagen}" alt="${producto.nombre}" 
                  onerror="this.src='https://via.placeholder.com/250x250/FFDAC1/5C4B51?text=🌸+Imagen'">
@@ -72,68 +47,36 @@ function renderizarProductos() {
                 Añadir al carrito 🎀
             </button>
         `;
-
-        // Añadir la tarjeta al grid principal
         productsGrid.appendChild(card);
     });
 }
 
-// 3. Función temporal para el carrito
 function agregarAlCarrito(idProducto) {
-    // 1. Encontrar el producto en nuestro inventario
     const productoSeleccionado = productos.find(producto => producto.id === idProducto);
-
-    // 2. Comprobar si el producto ya existe en el carrito
     const productoEnCarrito = carrito.find(item => item.id === idProducto);
 
     if (productoEnCarrito) {
-        productoEnCarrito.cantidad++; // Si existe, sumamos uno a la cantidad
+        productoEnCarrito.cantidad++; 
     } else {
-        // Si no existe, lo añadimos con cantidad 1
         carrito.push({ ...productoSeleccionado, cantidad: 1 });
     }
 
-    // 3. Guardar el carrito actualizado en localStorage
     localStorage.setItem('carritoOtaku', JSON.stringify(carrito));
-
-    // 4. Actualizar la interfaz
     actualizarContadorCarrito();
     
-    // Pequeño feedback visual en consola
-    console.log("¡Añadido! Carrito actual:", carrito);
+    // Si el panel del carrito está abierto, lo recargamos para que se vea el nuevo producto
+    if (cartModal.classList.contains('open')) {
+        renderizarCarrito();
+    }
 }
+
 function actualizarContadorCarrito() {
-    // Sumamos la propiedad 'cantidad' de todos los items en el carrito
     const totalArticulos = carrito.reduce((total, item) => total + item.cantidad, 0);
     cartCounter.textContent = totalArticulos;
 }
 
-// 4. Inicializar la vista cuando el documento cargue
-document.addEventListener('DOMContentLoaded', () => {
-    renderizarProductos();
-    actualizarContadorCarrito();
-});
-
-// Referencias del DOM para el carrito
-const cartModal = document.getElementById('cart-modal');
-const openCartBtn = document.getElementById('open-cart');
-const closeCartBtn = document.getElementById('close-cart');
-const cartItemsContainer = document.getElementById('cart-items');
-const cartTotalElement = document.getElementById('cart-total');
-
-// Abrir y cerrar el panel del carrito
-openCartBtn.addEventListener('click', () => {
-    cartModal.classList.add('open');
-    renderizarCarrito(); // Dibujamos los items cada vez que se abre
-});
-
-closeCartBtn.addEventListener('click', () => {
-    cartModal.classList.remove('open');
-});
-
-// Función para pintar los productos dentro del carrito
 function renderizarCarrito() {
-    cartItemsContainer.innerHTML = ''; // Limpiamos antes de pintar
+    cartItemsContainer.innerHTML = ''; 
     let total = 0;
 
     if (carrito.length === 0) {
@@ -142,7 +85,6 @@ function renderizarCarrito() {
         carrito.forEach(item => {
             const itemElement = document.createElement('div');
             itemElement.className = 'cart-item';
-            
             itemElement.innerHTML = `
                 <img src="${item.imagen}" alt="${item.nombre}" onerror="this.src='https://via.placeholder.com/60/FFDAC1/5C4B51?text=🌸'">
                 <div class="cart-item-info">
@@ -151,12 +93,76 @@ function renderizarCarrito() {
                 </div>
             `;
             cartItemsContainer.appendChild(itemElement);
-
-            // Sumamos al total general
             total += item.precio * item.cantidad;
         });
     }
-
-    // Actualizamos el precio total en el footer del carrito
     cartTotalElement.textContent = total.toFixed(2);
 }
+
+// =========================================================
+// 4. EVENTOS DE CLIC (INTERFAZ)
+// =========================================================
+openCartBtn.addEventListener('click', () => {
+    cartModal.classList.add('open');
+    renderizarCarrito(); 
+});
+
+closeCartBtn.addEventListener('click', () => {
+    cartModal.classList.remove('open');
+});
+
+// =========================================================
+// 5. LÓGICA DE CHECKOUT Y LOGÍSTICA SIMULADA
+// =========================================================
+
+// Abrir modal de pago al pulsar "Proceder al Pago"
+btnCheckout.addEventListener('click', () => {
+    if (carrito.length === 0) {
+        alert("¡Tu carrito está vacío! Añade algo kawaii primero. 🌸");
+        return;
+    }
+    cartModal.classList.remove('open'); // Cerramos el panel lateral
+    checkoutOverlay.classList.add('active'); // Abrimos la ventana de pago
+});
+
+// Cerrar modal de pago
+closeCheckoutBtn.addEventListener('click', () => {
+    checkoutOverlay.classList.remove('active');
+});
+
+// Procesar el formulario de pago falso
+checkoutForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // Evitamos que la página se recargue
+
+    // Creamos el objeto del pedido simulado
+    const nuevoPedido = {
+        id: "OTK-" + Math.floor(Math.random() * 10000), // Genera ID aleatorio
+        cliente: document.getElementById('nombre-cliente').value,
+        total: cartTotalElement.textContent,
+        estado: "Pendiente",
+        fecha: new Date().toLocaleDateString()
+    };
+
+    // Guardamos el pedido en el "backend" simulado (localStorage de pedidos)
+    let pedidos = JSON.parse(localStorage.getItem('pedidosOtaku')) || [];
+    pedidos.push(nuevoPedido);
+    localStorage.setItem('pedidosOtaku', JSON.stringify(pedidos));
+
+    // Guardamos temporalmente el ID para mostrarlo en la página de éxito
+    localStorage.setItem('pedidoActual', nuevoPedido.id);
+
+    // Vaciamos el carrito porque ya se compró
+    carrito = [];
+    localStorage.setItem('carritoOtaku', JSON.stringify(carrito));
+
+    // Redirigimos a la página de éxito
+    window.location.href = "success.html";
+});
+
+// =========================================================
+// 6. INICIALIZAR LA APP
+// =========================================================
+document.addEventListener('DOMContentLoaded', () => {
+    renderizarProductos();
+    actualizarContadorCarrito();
+});
