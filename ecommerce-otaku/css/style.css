@@ -188,3 +188,118 @@ h1, h2, h3 {
 .btn-add:active {
     transform: scale(0.95);
 }
+
+/* --- MODAL DEL CARRITO DESLIZABLE --- */
+.cart-modal {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Lo escondemos fuera de la pantalla a la derecha */
+    width: 350px;
+    height: 100vh;
+    background-color: var(--bg-color);
+    box-shadow: -10px 0 20px rgba(255, 183, 178, 0.2);
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+/* Esta clase se la pondremos con JavaScript para que aparezca */
+.cart-modal.open {
+    right: 0; 
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.close-btn:hover {
+    transform: scale(1.2);
+}
+
+.cart-items {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Tarjetitas pequeñas dentro del carrito */
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 10px;
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+.cart-item img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.cart-item-info {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.cart-item-info h5 {
+    margin: 0 0 5px 0;
+    font-size: 0.9rem;
+}
+
+.cart-footer {
+    padding: 1.5rem;
+    border-top: 2px dashed var(--primary-color);
+    background: white;
+}
+
+.total-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-main);
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-checkout {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--secondary-color);
+    color: var(--text-main);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.3s, transform 0.1s;
+    font-family: var(--font-body);
+}
+
+.btn-checkout:hover {
+    background-color: #9CE0E8;
+}
+
+.btn-checkout:active {
+    transform: scale(0.97);
+}

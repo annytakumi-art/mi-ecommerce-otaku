@@ -109,4 +109,54 @@ function actualizarContadorCarrito() {
 }
 
 // 4. Inicializar la vista cuando el documento cargue
-document.addEventListener('DOMContentLoaded', renderizarProductos);
+document.addEventListener('DOMContentLoaded', () => {
+    renderizarProductos();
+    actualizarContadorCarrito();
+});
+
+// Referencias del DOM para el carrito
+const cartModal = document.getElementById('cart-modal');
+const openCartBtn = document.getElementById('open-cart');
+const closeCartBtn = document.getElementById('close-cart');
+const cartItemsContainer = document.getElementById('cart-items');
+const cartTotalElement = document.getElementById('cart-total');
+
+// Abrir y cerrar el panel del carrito
+openCartBtn.addEventListener('click', () => {
+    cartModal.classList.add('open');
+    renderizarCarrito(); // Dibujamos los items cada vez que se abre
+});
+
+closeCartBtn.addEventListener('click', () => {
+    cartModal.classList.remove('open');
+});
+
+// Función para pintar los productos dentro del carrito
+function renderizarCarrito() {
+    cartItemsContainer.innerHTML = ''; // Limpiamos antes de pintar
+    let total = 0;
+
+    if (carrito.length === 0) {
+        cartItemsContainer.innerHTML = '<p style="text-align:center; color:#8C7A80;">Tu carrito está vacío 🥺</p>';
+    } else {
+        carrito.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'cart-item';
+            
+            itemElement.innerHTML = `
+                <img src="${item.imagen}" alt="${item.nombre}" onerror="this.src='https://via.placeholder.com/60/FFDAC1/5C4B51?text=🌸'">
+                <div class="cart-item-info">
+                    <h5>${item.nombre}</h5>
+                    <p>${item.precio.toFixed(2)} € x ${item.cantidad}</p>
+                </div>
+            `;
+            cartItemsContainer.appendChild(itemElement);
+
+            // Sumamos al total general
+            total += item.precio * item.cantidad;
+        });
+    }
+
+    // Actualizamos el precio total en el footer del carrito
+    cartTotalElement.textContent = total.toFixed(2);
+}
